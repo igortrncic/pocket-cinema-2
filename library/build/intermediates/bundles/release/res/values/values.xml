@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/Users/igortrncic/CreditCardView/library/src/main/res/values/colors.xml -->
+    <eat-comment/>
+    <color name="card_background">#ffff0000</color>
+    <color name="card_border">#ffb1bcbe</color>
+    <color name="card_text_background">#00000000</color>
+    <declare-styleable name="CreditCardView"><attr format="string" name="cardNumber"/><attr format="color" name="cardNumberTextColor"/><attr format="enum" name="cardNumberFormat"><enum name="all_digits" value="0"/><enum name="masked_all_but_last_four" value="1"/><enum name="only_last_four" value="2"/><enum name="masked_all" value="3"/></attr><attr format="string" name="cardName"/><attr format="color" name="cardNameTextColor"/><attr format="enum" name="type"><enum name="visa" value="0"/><enum name="mastercard" value="1"/><enum name="american_express" value="2"/><enum name="discover" value="3"/><enum name="auto" value="4"/><enum name="none" value="5"/></attr><attr format="string" name="expiryDate"/><attr format="color" name="expiryDateTextColor"/><attr format="reference" name="brandLogo"/><attr format="boolean" name="putChip"/><attr format="boolean" name="isEditable"/><attr format="boolean" name="isCardNumberEditable"/><attr format="boolean" name="isCardNameEditable"/><attr format="boolean" name="isExpiryDateEditable"/><attr format="color" name="validTillTextColor"/><attr format="color" name="hintTextColor"/></declare-styleable>
+    <!-- From: file:/Users/igortrncic/CreditCardView/library/src/main/res/values/dimens.xml -->
+    <eat-comment/>
+    <dimen name="brand_logo_height">40dp</dimen>
+    <dimen name="brand_logo_width">120dp</dimen>
+    <dimen name="card_border_width">2dp</dimen>
+    <dimen name="card_common_margin">16dp</dimen>
+    <dimen name="card_corner_radius">10dp</dimen>
+    <dimen name="card_name_text_size">14sp</dimen>
+    <dimen name="card_number_margin_bottom">25dp</dimen>
+    <dimen name="card_number_text_size">16sp</dimen>
+    <dimen name="dummy_view_params">0dp</dimen>
+    <dimen name="expiry_date_margin_left">5dp</dimen>
+    <dimen name="expiry_date_text_size">14sp</dimen>
+    <dimen name="valid_till_text_size">10sp</dimen>
+    <!-- From: file:/Users/igortrncic/CreditCardView/library/src/main/res/values/integers.xml -->
+    <eat-comment/>
+    <integer name="card_name_max_length">18</integer>
+    <integer name="card_number_max_length">20</integer>
+    <integer name="expiry_date_max_length">7</integer>
+    <!-- From: file:/Users/igortrncic/CreditCardView/library/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="app_name">CreditCardView Library</string>
+    <string name="brand_logo">Brand Logo</string>
+    <string name="card_logo">Card Logo</string>
+    <string name="card_name_hint">ENTER CARD NAME</string>
+    <string name="card_number_hint">ENTER CARD NUMBER</string>
+    <string name="chip_visible">Chip Visible</string>
+    <string name="expiry_date_hint">MM/YY</string>
+    <string name="font_path">fonts/halter.ttf</string>
+    <string name="valid_till">VALID TILL</string>
+</resources>

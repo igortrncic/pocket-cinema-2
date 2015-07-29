@@ -1,0 +1,90 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/movie_detail_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.trncic.igor.pocketcinema.ui.DetailsFragment">
+
+    <ImageView
+        android:id="@+id/background_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/poster_image"
+                android:layout_width="@dimen/details_image_width"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="@dimen/poster_image_bottom_margin"
+                android:layout_marginLeft="@dimen/poster_image_left_margin"
+                android:layout_marginTop="@dimen/poster_image_top_margin"
+                android:adjustViewBounds="true"
+                android:minHeight="@dimen/details_image_height" />
+
+            <RelativeLayout
+                android:id="@+id/info_container"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_alignTop="@id/poster_image"
+                android:layout_marginLeft="@dimen/horizontal_margin_poster_title"
+                android:layout_marginRight="16dp"
+                android:layout_toRightOf="@id/poster_image">
+
+                <me.grantland.widget.AutofitTextView
+                    android:id="@+id/original_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginBottom="16dp"
+                    android:maxLines="3"
+                    android:text="@string/hello_world"
+                    android:textAppearance="@android:style/TextAppearance.Holo.Large.Inverse"
+                    android:textSize="32sp" />
+
+                <TextView
+                    android:id="@+id/release_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/vote_average"
+                    android:layout_marginBottom="0dp"
+                    android:textAppearance="@android:style/TextAppearance.Holo.Small.Inverse"
+                    android:textColor="@color/release_date" />
+
+                <TextView
+                    android:id="@+id/vote_average"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_toRightOf="@+id/release_date"
+                    android:textColor="@color/average_vote"
+                    android:textSize="56sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/overview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/poster_image"
+                android:layout_below="@+id/poster_image"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="20dp"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+    </ScrollView>
+</FrameLayout>
