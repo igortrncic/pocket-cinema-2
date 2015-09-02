@@ -24,6 +24,9 @@ import com.trncic.igor.pocketcinema.model.Movie;
 import com.trncic.igor.pocketcinema.model.MovieUtils;
 import com.trncic.igor.pocketcinema.picassoutils.PaletteTransformation;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -39,12 +42,12 @@ public class DetailsFragment extends Fragment {
     private Movie mMovie;
     private boolean mTwoPane;
 
-    private TextView mOriginalTitle;
-    private ImageView mBackgroundImage;
-    private ImageView mPosterImage;
-    private TextView mOverview;
-    private TextView mReleaseDate;
-    private TextView mVoteAverage;
+    @Bind(R.id.original_title) TextView mOriginalTitle;
+    @Bind(R.id.background_image) ImageView mBackgroundImage;
+    @Bind(R.id.poster_image) ImageView mPosterImage;
+    @Bind(R.id.overview) TextView mOverview;
+    @Bind(R.id.release_date) TextView mReleaseDate;
+    @Bind(R.id.vote_average) TextView mVoteAverage;
 
     private OnFragmentInteractionListener mListener;
 
@@ -88,6 +91,7 @@ public class DetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_details, container, false);
+        ButterKnife.bind(this, view);
 
         if (mMovie != null) {
             if (!mTwoPane) {
@@ -95,13 +99,6 @@ public class DetailsFragment extends Fragment {
                 ab.setTitle(R.string.details);
                 ab.setSubtitle(mMovie.getTitle());
             }
-
-            mOriginalTitle = (TextView) view.findViewById(R.id.original_title);
-            mBackgroundImage = (ImageView) view.findViewById(R.id.background_image);
-            mPosterImage = (ImageView) view.findViewById(R.id.poster_image);
-            mOverview = (TextView) view.findViewById(R.id.overview);
-            mReleaseDate = (TextView) view.findViewById(R.id.release_date);
-            mVoteAverage = (TextView) view.findViewById(R.id.vote_average);
 
             mOriginalTitle.setText(mMovie.getTitle());
             mOverview.setText(mMovie.getOverview());

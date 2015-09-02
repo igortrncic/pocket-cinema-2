@@ -4,12 +4,10 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-import io.realm.RealmObject;
-
 /**
  * Created by igortrncic on 6/10/15.
  */
-public class Movie extends RealmObject implements Serializable {
+public class Movie implements Serializable {
 
     private int id;
 

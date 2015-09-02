@@ -9,4 +9,11 @@
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_sort_order">Sort Order</string>
+    <string name="popularity_order">Popularity</string>
+    <string name="rating_order">Rating</string>
+    <string name="favorites">Favorites</string>
+    <string name="sort_order_popularity">popularity.desc</string>
+    <string name="sort_order_rating">vote_average.desc</string>
+    <string name="sort_order_favorites">favorites</string>
 </resources>

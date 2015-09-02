@@ -2,6 +2,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.trncic.igor.pocketcinema.ui.MoviesActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+    <item
+        android:id="@+id/sort_order"
+        android:icon="@drawable/ic_import_export_white"
+        android:title=""
+        app:showAsAction="always">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/popularity_order"
+                    android:title="@string/popularity_order"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/rating_order"
+                    android:title="@string/rating_order"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/favorites"
+                    android:title="@string/favorites"
+                    app:showAsAction="never" />
+            </group>
+        </menu>
+    </item>
 </menu>

@@ -1,12 +1,10 @@
 package com.trncic.igor.pocketcinema.ui;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +13,15 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.trncic.igor.pocketcinema.R;
-import com.trncic.igor.pocketcinema.model.MoviesResponse;
 import com.trncic.igor.pocketcinema.model.Movie;
+import com.trncic.igor.pocketcinema.model.MoviesResponse;
 import com.trncic.igor.pocketcinema.rest.RestClient;
 import com.trncic.igor.pocketcinema.ui.adapters.MoviesAdapter;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -29,9 +29,10 @@ import retrofit.client.Response;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MoviesFragment extends Fragment implements AdapterView.OnItemClickListener{
+public class MoviesFragment extends Fragment implements AdapterView.OnItemClickListener {
 
-    private GridView mGridView;
+    @Bind(R.id.gridview)
+    GridView mGridView;
     private MoviesAdapter mAdapter;
     private OnFragmentInteractionListener mActionListener;
 
@@ -49,9 +50,7 @@ public class MoviesFragment extends Fragment implements AdapterView.OnItemClickL
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_movies, container, false);
-
-        // Set the adapter
-        mGridView = (GridView) view.findViewById(R.id.gridview);
+        ButterKnife.bind(this, view);
 
         mAdapter = new MoviesAdapter(getActivity(), new ArrayList<Movie>());
         mGridView.setAdapter(mAdapter);
@@ -80,10 +79,10 @@ public class MoviesFragment extends Fragment implements AdapterView.OnItemClickL
     }
 
 
-    public void discoverMovies(){
+    public void discoverMovies() {
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String sortOptionsPref = sharedPref.getString(SettingsActivity.KEY_PREF_SORT_OPTIONS, "");
+        String sortOptionsPref = sharedPref.getString(MoviesActivity.PREFS_SORT_ORDER, getActivity().getString(R.string.sort_order_popularity));
 
         RestClient.get().discoverMovies(sortOptionsPref, new Callback<MoviesResponse>() {
             @Override
@@ -113,6 +112,7 @@ public class MoviesFragment extends Fragment implements AdapterView.OnItemClickL
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onItemClick(Movie movie);
+
         public void onMoviesLoaded(Movie movie);
     }
 }
