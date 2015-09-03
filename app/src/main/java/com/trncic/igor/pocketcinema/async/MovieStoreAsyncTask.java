@@ -11,6 +11,10 @@ import com.trncic.igor.pocketcinema.providers.MoviesProvider;
 
 import java.util.ArrayList;
 
+
+/**
+ * This code is implemented with help of https://github.com/ab-helly
+ */
 public class MovieStoreAsyncTask extends AsyncTask<Movie, Void, Void> {
 
     private final Context mContext;

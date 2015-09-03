@@ -8,7 +8,9 @@ import android.os.AsyncTask;
 import com.trncic.igor.pocketcinema.model.Movie;
 import com.trncic.igor.pocketcinema.providers.MoviesProvider;
 
-
+/**
+ * This code is implemented with help of https://github.com/ab-helly
+ */
 public class MovieDeleteAsyncTask extends AsyncTask<Movie, Void, Void> {
 
     private final Context mContext;
