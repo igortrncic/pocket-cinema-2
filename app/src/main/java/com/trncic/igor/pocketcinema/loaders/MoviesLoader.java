@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.content.AsyncTaskLoader;
 
-import com.trncic.igor.pocketcinema.R;
 import com.trncic.igor.pocketcinema.model.Movie;
 import com.trncic.igor.pocketcinema.providers.MoviesProvider;
 
@@ -34,25 +33,8 @@ public class MoviesLoader extends AsyncTaskLoader<ArrayList<Movie>> {
 
     @Override
     public ArrayList<Movie> loadInBackground() {
-
-        Cursor cursor = null;
-
-        String orderByColumn = null;
-        String selection = MoviesProvider.MovieContract.ORDER_TYPE + "='" + movieQueryType + "'";
-
-        // Determine query arguments for favorites or different sort orders
-        if (movieQueryType.equals(context.getString(R.string.sort_order_favorites))) {
-        } else if (movieQueryType.equals(context.getString(R.string.sort_order_rating))) {
-            orderByColumn = MoviesProvider.MovieContract.VOTE_AVERAGE;
-        } else if (movieQueryType.equals(context.getString(R.string.sort_order_popularity))) {
-            orderByColumn = MoviesProvider.MovieContract.POPULARITY;
-        } else {
-            return new ArrayList<>();
-        }
-
-        cursor = getContext().getContentResolver()
-                .query(MoviesProvider.MovieContract.CONTENT_URI, null, selection, null,
-                        orderByColumn + " DESC");
+        Cursor cursor = getContext().getContentResolver()
+                .query(MoviesProvider.MovieContract.CONTENT_URI, null, null, null, null);
 
         if (null == cursor) {
             return null;

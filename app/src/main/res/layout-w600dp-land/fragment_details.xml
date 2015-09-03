@@ -19,8 +19,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginRight="23dp"
-            android:layout_marginLeft="23dp">
+            android:layout_marginLeft="23dp"
+            android:layout_marginRight="23dp">
 
             <ImageView
                 android:id="@+id/poster_image"
@@ -37,10 +37,10 @@
                 android:id="@+id/info_container"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
+                android:layout_alignParentLeft="true"
                 android:layout_alignTop="@id/poster_image"
-                android:layout_toLeftOf="@id/poster_image"
                 android:layout_marginRight="23dp"
-                android:layout_alignParentLeft="true">
+                android:layout_toLeftOf="@id/poster_image">
 
                 <me.grantland.widget.AutofitTextView
                     android:id="@+id/original_title"
@@ -72,11 +72,12 @@
                     android:textStyle="bold" />
 
                 <CheckBox
+                    android:id="@+id/favorite"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:background="@color/material_blue_grey_800"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
+                    android:button="@drawable/favorites_selector"
                     android:checked="false" />
 
             </RelativeLayout>

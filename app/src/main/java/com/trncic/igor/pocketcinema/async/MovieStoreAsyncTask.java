@@ -19,11 +19,9 @@ import java.util.ArrayList;
 public class MovieStoreAsyncTask extends AsyncTask<Movie, Void, Void> {
 
     private final Context mContext;
-    private String mOrderType;
 
-    public MovieStoreAsyncTask(Context context, String orderType) {
+    public MovieStoreAsyncTask(Context context) {
         mContext = context;
-        mOrderType = orderType;
     }
 
     @SafeVarargs
@@ -43,7 +41,6 @@ public class MovieStoreAsyncTask extends AsyncTask<Movie, Void, Void> {
             value.put(MoviesProvider.MovieContract.OVERVIEW, movie.getOverview());
             value.put(MoviesProvider.MovieContract.VOTE_AVERAGE, movie.getVoteAverage());
             value.put(MoviesProvider.MovieContract.POPULARITY, movie.getPopularity());
-            value.put(MoviesProvider.MovieContract.ORDER_TYPE, mOrderType);
             value.put(MoviesProvider.MovieContract.RELEASE_DATE, movie.getReleaseDate());
             Uri uri = cr.insert(contentUri, value);
             if (uri.compareTo(Uri.withAppendedPath(contentUri, Long.toString(movie.getId()))) < 0) {

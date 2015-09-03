@@ -73,12 +73,13 @@
                     android:textStyle="bold" />
 
                 <CheckBox
+                    android:id="@+id/favorite"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:layout_alignLeft="@id/vote_average"
                     android:layout_above="@id/vote_average"
-                    android:background="@color/material_blue_grey_800"
-                    android:layout_below="@+id/original_title" />
+                    android:layout_alignLeft="@id/vote_average"
+                    android:layout_below="@+id/original_title"
+                    android:button="@drawable/favorites_selector" />
 
             </RelativeLayout>
 

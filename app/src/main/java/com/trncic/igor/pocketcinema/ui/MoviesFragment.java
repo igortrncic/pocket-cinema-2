@@ -72,6 +72,11 @@ public class MoviesFragment extends Fragment implements AdapterView.OnItemClickL
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Movie movie = (Movie) mAdapter.getItem(position);
         mActionListener.onItemClick(movie);
@@ -91,12 +96,13 @@ public class MoviesFragment extends Fragment implements AdapterView.OnItemClickL
 
     public void discoverMovies() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        final String sortOptionsPref = sharedPref.getString(PREFS_SORT_ORDER, getActivity().getString(R.string.sort_order_popularity));
+        String sortOptionsPref = sharedPref.getString(PREFS_SORT_ORDER, getActivity().getString(R.string.sort_order_popularity));
 
         if (sortOptionsPref.equals(getActivity().getString(R.string.sort_order_favorites))) {
             getActivity().getSupportLoaderManager().destroyLoader(LOADER_ID);
             getActivity().getSupportLoaderManager().restartLoader(LOADER_ID, null, MoviesFragment.this);
         } else {
+            getActivity().getSupportLoaderManager().destroyLoader(LOADER_ID);
             RestClient.get().discoverMovies(sortOptionsPref, new Callback<MoviesResponse>() {
                 @Override
                 public void success(MoviesResponse baseModel, Response response) {

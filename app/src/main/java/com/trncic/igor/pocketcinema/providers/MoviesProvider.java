@@ -62,9 +62,6 @@ public class MoviesProvider extends ProviGenProvider {
         @Column(Column.Type.TEXT)
         String RELEASE_DATE = "release_date";
 
-        @Column(Column.Type.TEXT)
-        String ORDER_TYPE = "order_type";
-
         @ContentUri
         Uri CONTENT_URI = Uri.parse(AUTHORITY + "movie");
     }

@@ -1,6 +1,7 @@
 package com.trncic.igor.pocketcinema.ui;
 
 import android.app.Activity;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
@@ -14,15 +15,20 @@ import android.support.v7.graphics.Palette;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.trncic.igor.pocketcinema.R;
+import com.trncic.igor.pocketcinema.async.MovieDeleteAsyncTask;
+import com.trncic.igor.pocketcinema.async.MovieStoreAsyncTask;
 import com.trncic.igor.pocketcinema.model.Movie;
 import com.trncic.igor.pocketcinema.model.MovieUtils;
 import com.trncic.igor.pocketcinema.picassoutils.PaletteTransformation;
+import com.trncic.igor.pocketcinema.providers.MoviesProvider;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -38,17 +44,22 @@ import butterknife.ButterKnife;
 public class DetailsFragment extends Fragment {
     public static final String MOVIE = "movie";
     public static final String IS_TWO_PANE = "is_two_pane";
-
+    @Bind(R.id.original_title)
+    TextView mOriginalTitle;
+    @Bind(R.id.background_image)
+    ImageView mBackgroundImage;
+    @Bind(R.id.poster_image)
+    ImageView mPosterImage;
+    @Bind(R.id.overview)
+    TextView mOverview;
+    @Bind(R.id.release_date)
+    TextView mReleaseDate;
+    @Bind(R.id.vote_average)
+    TextView mVoteAverage;
+    @Bind(R.id.favorite)
+    CheckBox mFavorite;
     private Movie mMovie;
     private boolean mTwoPane;
-
-    @Bind(R.id.original_title) TextView mOriginalTitle;
-    @Bind(R.id.background_image) ImageView mBackgroundImage;
-    @Bind(R.id.poster_image) ImageView mPosterImage;
-    @Bind(R.id.overview) TextView mOverview;
-    @Bind(R.id.release_date) TextView mReleaseDate;
-    @Bind(R.id.vote_average) TextView mVoteAverage;
-
     private OnFragmentInteractionListener mListener;
 
     public DetailsFragment() {
@@ -105,6 +116,19 @@ public class DetailsFragment extends Fragment {
             mReleaseDate.setText(mMovie.getReleaseDate());
             mVoteAverage.setText(String.valueOf(mMovie.getVoteAverage()));
 
+            resolveFavoriteStatus();
+
+            mFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked){
+                        addMovieToFavorites();
+                    }else{
+                        removeMovieFromFavorites();
+                    }
+                }
+            });
+
             mBackgroundImage.setColorFilter(getResources().getColor(R.color.black_45), PorterDuff.Mode.DARKEN);
 
             Picasso.with(getActivity())
@@ -134,6 +158,30 @@ public class DetailsFragment extends Fragment {
         }
 
         return view;
+    }
+
+    private void resolveFavoriteStatus() {
+        // Try to find this movie in DB
+        Cursor cursor = getActivity().getContentResolver().query(
+                Uri.withAppendedPath(MoviesProvider.MovieContract.CONTENT_URI, String.valueOf(mMovie.getId())),
+                null, "", null, "");
+
+        if (null == cursor) {
+            mFavorite.setChecked(false);
+        } else if (cursor.getCount() < 1) {
+            cursor.close();
+            mFavorite.setChecked(false);
+        } else {
+            mFavorite.setChecked(true);
+        }
+    }
+
+    private void addMovieToFavorites(){
+        new MovieStoreAsyncTask(getActivity()).execute(mMovie);
+    }
+
+    private void removeMovieFromFavorites(){
+        new MovieDeleteAsyncTask(getActivity()).execute(mMovie);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
