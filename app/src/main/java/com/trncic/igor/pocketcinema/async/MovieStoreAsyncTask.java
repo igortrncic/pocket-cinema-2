@@ -11,11 +11,6 @@ import com.trncic.igor.pocketcinema.providers.MoviesProvider;
 
 import java.util.ArrayList;
 
-/**
- * AsyncTask to store movie list to db.
- * TODO: use {@link android.content.AsyncQueryHandler} if database grows.
- * Created by abhelly on 24.06.15.
- */
 public class MovieStoreAsyncTask extends AsyncTask<Movie, Void, Void> {
 
     private final Context mContext;
