@@ -21,7 +21,7 @@ public class MoviesProvider extends ProviGenProvider {
     private static final String AUTHORITY = "content://com.trncic.igor.pocketcinema.movies/";
 
     private static Class[] contracts = new Class[]{
-            MovieContract.class, TrailerContract.class, ReviewContract.class};
+            MovieContract.class};
 
     @Override
     public SQLiteOpenHelper openHelper(Context context) {
@@ -64,42 +64,5 @@ public class MoviesProvider extends ProviGenProvider {
 
         @ContentUri
         Uri CONTENT_URI = Uri.parse(AUTHORITY + "movie");
-    }
-
-    /**
-     * Movie trailer data model contract.
-     */
-    public interface TrailerContract extends ProviGenBaseContract {
-
-        @Column(Column.Type.TEXT)
-        String MOVIE_ID = COL_MOVIE_ID;
-
-        @Column(Column.Type.TEXT)
-        String KEY = "key";
-
-        @Column(Column.Type.TEXT)
-        String NAME = "name";
-
-        @ContentUri
-        Uri CONTENT_URI = Uri.parse(AUTHORITY + "trailer");
-    }
-
-    /**
-     * Movie review data model contract.
-     */
-    public interface ReviewContract extends ProviGenBaseContract {
-
-        @Column(Column.Type.TEXT)
-        String MOVIE_ID = COL_MOVIE_ID;
-
-        @Column(Column.Type.TEXT)
-        String AUTHOR = "author";
-
-        @Column(Column.Type.TEXT)
-        String CONTENT = "content";
-
-        @ContentUri
-        Uri CONTENT_URI = Uri.parse(AUTHORITY + "review");
-
     }
 }

@@ -1,6 +1,7 @@
 package com.trncic.igor.pocketcinema.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
@@ -13,11 +14,15 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
@@ -27,11 +32,20 @@ import com.trncic.igor.pocketcinema.async.MovieDeleteAsyncTask;
 import com.trncic.igor.pocketcinema.async.MovieStoreAsyncTask;
 import com.trncic.igor.pocketcinema.model.Movie;
 import com.trncic.igor.pocketcinema.model.MovieUtils;
+import com.trncic.igor.pocketcinema.model.Review;
+import com.trncic.igor.pocketcinema.model.ReviewsResponse;
+import com.trncic.igor.pocketcinema.model.Trailer;
+import com.trncic.igor.pocketcinema.model.TrailersResponse;
 import com.trncic.igor.pocketcinema.picassoutils.PaletteTransformation;
 import com.trncic.igor.pocketcinema.providers.MoviesProvider;
+import com.trncic.igor.pocketcinema.rest.RestClient;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,7 +72,15 @@ public class DetailsFragment extends Fragment {
     TextView mVoteAverage;
     @Bind(R.id.favorite)
     CheckBox mFavorite;
+    @Bind(R.id.trailers_container)
+    LinearLayout trailersContainer;
+    @Bind(R.id.reviews_container)
+    LinearLayout reviewsContainer;
     private Movie mMovie;
+
+    private List<Trailer> mTrailers;
+    private List<Review> mReviews;
+
     private boolean mTwoPane;
     private OnFragmentInteractionListener mListener;
 
@@ -104,12 +126,16 @@ public class DetailsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_details, container, false);
         ButterKnife.bind(this, view);
 
+        setHasOptionsMenu(true);
+
         if (mMovie != null) {
             if (!mTwoPane) {
                 ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
                 ab.setTitle(R.string.details);
                 ab.setSubtitle(mMovie.getTitle());
             }
+
+            mFavorite.setVisibility(View.VISIBLE);
 
             mOriginalTitle.setText(mMovie.getTitle());
             mOverview.setText(mMovie.getOverview());
@@ -121,9 +147,9 @@ public class DetailsFragment extends Fragment {
             mFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(isChecked){
+                    if (isChecked) {
                         addMovieToFavorites();
-                    }else{
+                    } else {
                         removeMovieFromFavorites();
                     }
                 }
@@ -155,9 +181,79 @@ public class DetailsFragment extends Fragment {
                             }
                         }
                     });
+
+            // Load trailers
+            loadTrailers();
+
+            // Load reviews
+            loadReviews();
         }
 
+
         return view;
+    }
+
+    private void loadTrailers() {
+        RestClient.get().getTrailers(mMovie.getId(), new retrofit.Callback<TrailersResponse>() {
+            @Override
+            public void success(TrailersResponse trailersResponse, Response response) {
+                if (trailersResponse.results == null || trailersResponse.results.size() < 1) {
+                    trailersContainer.setVisibility(View.GONE);
+                    return;
+                }
+                mTrailers = trailersResponse.results;
+                LayoutInflater inflater = LayoutInflater.from(getActivity());
+
+                for (final Trailer trailer : trailersResponse.results) {
+                    View view = inflater.inflate(R.layout.trailer_item, trailersContainer, false);
+                    ((TextView) view.findViewById(R.id.name)).setText(trailer.getName());
+
+                    view.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent();
+                            intent.setAction(Intent.ACTION_VIEW);
+                            intent.setData(Uri.parse(trailer.generateYoutubeLink()));
+                            startActivity(intent);
+                        }
+                    });
+                    trailersContainer.addView(view);
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+            }
+        });
+    }
+
+    private void loadReviews() {
+        RestClient.get().getReviews(mMovie.getId(), new retrofit.Callback<ReviewsResponse>() {
+            @Override
+            public void success(ReviewsResponse reviewsResponse, Response response) {
+
+                if (reviewsResponse.results == null || reviewsResponse.results.size() < 1) {
+                    reviewsContainer.setVisibility(View.GONE);
+                    return;
+                }
+
+                mReviews = reviewsResponse.results;
+
+                LayoutInflater inflater = LayoutInflater.from(getActivity());
+
+                for (Review review : reviewsResponse.results) {
+                    View view = inflater.inflate(R.layout.review_item, reviewsContainer, false);
+                    ((TextView) view.findViewById(R.id.title)).setText(review.getAuthor());
+                    ((TextView) view.findViewById(R.id.content)).setText(review.getContent());
+
+                    reviewsContainer.addView(view);
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+            }
+        });
     }
 
     private void resolveFavoriteStatus() {
@@ -176,11 +272,11 @@ public class DetailsFragment extends Fragment {
         }
     }
 
-    private void addMovieToFavorites(){
+    private void addMovieToFavorites() {
         new MovieStoreAsyncTask(getActivity()).execute(mMovie);
     }
 
-    private void removeMovieFromFavorites(){
+    private void removeMovieFromFavorites() {
         new MovieDeleteAsyncTask(getActivity()).execute(mMovie);
     }
 
@@ -206,6 +302,30 @@ public class DetailsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        getActivity().getMenuInflater().inflate(R.menu.menu_details, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.share) {
+
+            if (mTrailers != null && mTrailers.size() > 0) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+
+                intent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.watch_trailer) + mMovie.getTitle() + " " +
+                        mTrailers.get(0).generateYoutubeLink());
+                startActivity(Intent.createChooser(intent, getString(R.string.share_movie)));
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**

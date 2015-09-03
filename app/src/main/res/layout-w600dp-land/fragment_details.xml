@@ -78,7 +78,8 @@
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
                     android:button="@drawable/favorites_selector"
-                    android:checked="false" />
+                    android:checked="false"
+                    android:visibility="invisible" />
 
             </RelativeLayout>
 
@@ -91,6 +92,25 @@
                 android:layout_marginBottom="20dp"
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />
+
+            <LinearLayout
+                android:id="@+id/trailers_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/overview"
+                android:layout_marginBottom="@dimen/poster_image_left_margin"
+                android:background="@color/black_70"
+                android:orientation="vertical"
+                android:padding="10dp" />
+
+            <LinearLayout
+                android:id="@+id/reviews_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/trailers_container"
+                android:background="@color/black_70"
+                android:orientation="vertical"
+                android:padding="10dp" />
         </RelativeLayout>
 
     </ScrollView>

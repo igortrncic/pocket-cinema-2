@@ -79,8 +79,8 @@
                     android:layout_above="@id/vote_average"
                     android:layout_alignLeft="@id/vote_average"
                     android:layout_below="@+id/original_title"
-                    android:button="@drawable/favorites_selector" />
-
+                    android:button="@drawable/favorites_selector"
+                    android:visibility="invisible" />
             </RelativeLayout>
 
             <TextView
@@ -93,6 +93,29 @@
                 android:layout_marginRight="20dp"
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />
+
+            <LinearLayout
+                android:id="@+id/trailers_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/overview"
+                android:layout_margin="@dimen/poster_image_left_margin"
+                android:background="@color/black_70"
+                android:orientation="vertical"
+                android:padding="10dp" />
+
+            <LinearLayout
+                android:id="@+id/reviews_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/trailers_container"
+                android:layout_margin="@dimen/poster_image_left_margin"
+                android:background="@color/black_70"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+
+            </LinearLayout>
         </RelativeLayout>
 
     </ScrollView>

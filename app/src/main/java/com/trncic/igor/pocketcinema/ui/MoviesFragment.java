@@ -23,6 +23,7 @@ import com.trncic.igor.pocketcinema.model.Movie;
 import com.trncic.igor.pocketcinema.model.MoviesResponse;
 import com.trncic.igor.pocketcinema.rest.RestClient;
 import com.trncic.igor.pocketcinema.ui.adapters.MoviesAdapter;
+import com.trncic.igor.pocketcinema.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -60,15 +61,27 @@ public class MoviesFragment extends Fragment implements AdapterView.OnItemClickL
         View view = inflater.inflate(R.layout.fragment_movies, container, false);
         ButterKnife.bind(this, view);
 
+        checkConnection();
+
         mAdapter = new MoviesAdapter(getActivity(), new ArrayList<Movie>());
         mGridView.setAdapter(mAdapter);
 
         mGridView.setOnItemClickListener(this);
+
         discoverMovies();
 
         setHasOptionsMenu(true);
 
         return view;
+    }
+
+    private void checkConnection() {
+        if (!Utils.isNetworkConnected(getActivity())) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(MoviesFragment.PREFS_SORT_ORDER, getString(R.string.sort_order_favorites));
+            editor.apply();
+        }
     }
 
     @Override
@@ -150,6 +163,10 @@ public class MoviesFragment extends Fragment implements AdapterView.OnItemClickL
             selectedId = R.id.favorites;
         } else {
             selectedId = R.id.popularity_order;
+        }
+        if (!Utils.isNetworkConnected(getActivity())) {
+            menu.findItem(R.id.rating_order).setEnabled(false);
+            menu.findItem(R.id.popularity_order).setEnabled(false);
         }
         menu.findItem(selectedId).setChecked(true);
     }

@@ -16,4 +16,8 @@
     <string name="sort_order_popularity">popularity.desc</string>
     <string name="sort_order_rating">vote_average.desc</string>
     <string name="sort_order_favorites">favorites</string>
+    <string name="trailers">Trailers:</string>
+    <string name="share_message">Watch trailer</string>
+    <string name="watch_trailer">"Watch trailer: "</string>
+    <string name="share_movie">Share movie</string>
 </resources>

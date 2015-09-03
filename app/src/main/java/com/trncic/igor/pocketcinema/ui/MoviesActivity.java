@@ -19,6 +19,7 @@ public class MoviesActivity extends AppCompatActivity implements MoviesFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movies);
+
         moviesFragment = (MoviesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
 
         if (findViewById(R.id.movie_detail_container) != null) {
