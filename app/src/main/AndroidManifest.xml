@@ -35,6 +35,11 @@
             android:name=".ui.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
+
+        <provider
+            android:name=".providers.MoviesProvider"
+            android:authorities="com.trncic.igor.pocketcinema.movies"
+            android:exported="false" />
     </application>
 
 </manifest>

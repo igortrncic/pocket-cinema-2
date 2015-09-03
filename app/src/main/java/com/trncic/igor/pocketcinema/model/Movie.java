@@ -28,7 +28,10 @@ public class Movie implements Serializable {
     private String releaseDate;
 
     @SerializedName("vote_average")
-    private String voteAverage;
+    private float voteAverage;
+
+    @SerializedName("popularity")
+    private Float popularity;
 
     public int getId() {
         return id;
@@ -86,11 +89,19 @@ public class Movie implements Serializable {
         this.releaseDate = releaseDate;
     }
 
-    public String getVoteAverage() {
+    public float getVoteAverage() {
         return voteAverage;
     }
 
-    public void setVoteAverage(String voteAverage) {
+    public void setVoteAverage(float voteAverage) {
         this.voteAverage = voteAverage;
+    }
+
+    public Float getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(Float popularity) {
+        this.popularity = popularity;
     }
 }

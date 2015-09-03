@@ -5,14 +5,20 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.trncic.igor.pocketcinema.R;
+import com.trncic.igor.pocketcinema.loaders.MoviesLoader;
 import com.trncic.igor.pocketcinema.model.Movie;
 import com.trncic.igor.pocketcinema.model.MoviesResponse;
 import com.trncic.igor.pocketcinema.rest.RestClient;
@@ -29,8 +35,10 @@ import retrofit.client.Response;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MoviesFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class MoviesFragment extends Fragment implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<ArrayList<Movie>> {
 
+    public static final String PREFS_SORT_ORDER = "PREFS_SORT_ORDER";
+    private static final int LOADER_ID = 1;
     @Bind(R.id.gridview)
     GridView mGridView;
     private MoviesAdapter mAdapter;
@@ -58,6 +66,8 @@ public class MoviesFragment extends Fragment implements AdapterView.OnItemClickL
         mGridView.setOnItemClickListener(this);
         discoverMovies();
 
+        setHasOptionsMenu(true);
+
         return view;
     }
 
@@ -80,23 +90,88 @@ public class MoviesFragment extends Fragment implements AdapterView.OnItemClickL
 
 
     public void discoverMovies() {
-
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String sortOptionsPref = sharedPref.getString(MoviesActivity.PREFS_SORT_ORDER, getActivity().getString(R.string.sort_order_popularity));
+        final String sortOptionsPref = sharedPref.getString(PREFS_SORT_ORDER, getActivity().getString(R.string.sort_order_popularity));
 
-        RestClient.get().discoverMovies(sortOptionsPref, new Callback<MoviesResponse>() {
-            @Override
-            public void success(MoviesResponse baseModel, Response response) {
-                mAdapter.setData(baseModel.results);
+        if (sortOptionsPref.equals(getActivity().getString(R.string.sort_order_favorites))) {
+            getActivity().getSupportLoaderManager().destroyLoader(LOADER_ID);
+            getActivity().getSupportLoaderManager().restartLoader(LOADER_ID, null, MoviesFragment.this);
+        } else {
+            RestClient.get().discoverMovies(sortOptionsPref, new Callback<MoviesResponse>() {
+                @Override
+                public void success(MoviesResponse baseModel, Response response) {
+                    mAdapter.setData(baseModel.results);
+                    mActionListener.onMoviesLoaded(baseModel.results.get(0));
+                }
 
-                mActionListener.onMoviesLoaded(baseModel.results.get(0));
-            }
+                @Override
+                public void failure(RetrofitError error) {
+                }
+            });
+        }
 
-            @Override
-            public void failure(RetrofitError error) {
-                String asas = "asdasd";
-            }
-        });
+    }
+
+    @Override
+    public Loader<ArrayList<Movie>> onCreateLoader(int id, Bundle args) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String sortOptionsPref = sharedPref.getString(PREFS_SORT_ORDER, getActivity().getString(R.string.sort_order_popularity));
+        return new MoviesLoader(getActivity(), sortOptionsPref);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<ArrayList<Movie>> loader, ArrayList<Movie> data) {
+        mAdapter.setData(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<ArrayList<Movie>> loader) {
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        getActivity().getMenuInflater().inflate(R.menu.menu_movies, menu);
+        // check default or last selected option
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String sortParam = prefs.getString(PREFS_SORT_ORDER,
+                getString(R.string.sort_order_popularity));
+        int selectedId;
+        if (getString(R.string.sort_order_rating).equals(sortParam)) {
+            selectedId = R.id.rating_order;
+        } else if (getString(R.string.sort_order_favorites).equals(sortParam)) {
+            selectedId = R.id.favorites;
+        } else {
+            selectedId = R.id.popularity_order;
+        }
+        menu.findItem(selectedId).setChecked(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        String param = null;
+        switch (item.getItemId()) {
+            case R.id.popularity_order:
+                param = getString(R.string.sort_order_popularity);
+                break;
+            case R.id.rating_order:
+                param = getString(R.string.sort_order_rating);
+                break;
+            case R.id.favorites:
+                param = getString(R.string.sort_order_favorites);
+                break;
+        }
+        if (param != null) {
+            item.setChecked(true);
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(PREFS_SORT_ORDER, param);
+            editor.apply();
+            discoverMovies();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**

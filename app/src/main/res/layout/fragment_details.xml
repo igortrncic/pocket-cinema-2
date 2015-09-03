@@ -45,7 +45,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="5dp"
                     android:maxLines="3"
                     android:text="@string/hello_world"
                     android:textAppearance="@android:style/TextAppearance.Holo.Large.Inverse"
@@ -71,6 +71,14 @@
                     android:textColor="@color/average_vote"
                     android:textSize="56sp"
                     android:textStyle="bold" />
+
+                <CheckBox
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignLeft="@id/vote_average"
+                    android:layout_above="@id/vote_average"
+                    android:background="@color/material_blue_grey_800"
+                    android:layout_below="@+id/original_title" />
 
             </RelativeLayout>
 

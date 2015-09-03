@@ -71,6 +71,14 @@
                     android:textSize="56sp"
                     android:textStyle="bold" />
 
+                <CheckBox
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@color/material_blue_grey_800"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:checked="false" />
+
             </RelativeLayout>
 
             <TextView

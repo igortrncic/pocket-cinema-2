@@ -103,7 +103,7 @@ public class DetailsFragment extends Fragment {
             mOriginalTitle.setText(mMovie.getTitle());
             mOverview.setText(mMovie.getOverview());
             mReleaseDate.setText(mMovie.getReleaseDate());
-            mVoteAverage.setText(mMovie.getVoteAverage());
+            mVoteAverage.setText(String.valueOf(mMovie.getVoteAverage()));
 
             mBackgroundImage.setColorFilter(getResources().getColor(R.color.black_45), PorterDuff.Mode.DARKEN);
 
