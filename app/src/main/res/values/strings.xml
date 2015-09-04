@@ -20,4 +20,6 @@
     <string name="share_message">Watch trailer</string>
     <string name="watch_trailer">"Watch trailer: "</string>
     <string name="share_movie">Share movie</string>
+    <string name="cant_connect_message">Can\'t Connect, Tap to Retry</string>
+    <string name="favorites_empty">Favorites is empty</string>
 </resources>

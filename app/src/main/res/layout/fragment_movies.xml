@@ -5,10 +5,32 @@
     android:background="@android:color/black"
     tools:context="com.trncic.igor.pocketcinema.ui.MoviesFragment">
 
+    <TextView
+        android:id="@+id/cant_connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:padding="30dp"
+        android:clickable="true"
+        android:text="@string/cant_connect_message"
+        android:textColor="@color/white"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/no_movies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cant_connect"
+        android:layout_centerInParent="true"
+        android:padding="30dp"
+        android:text="@string/favorites_empty"
+        android:textColor="@color/white"
+        android:visibility="gone" />
+
     <GridView
         android:id="@+id/gridview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:columnWidth="@dimen/grid_image_width"
         android:gravity="center"
         android:horizontalSpacing="0dp"

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import com.trncic.igor.pocketcinema.R;
 import com.trncic.igor.pocketcinema.loaders.MoviesLoader;
@@ -40,6 +41,10 @@ public class MoviesFragment extends Fragment implements AdapterView.OnItemClickL
 
     public static final String PREFS_SORT_ORDER = "PREFS_SORT_ORDER";
     private static final int LOADER_ID = 1;
+    @Bind(R.id.cant_connect)
+    TextView mCantConnect;
+    @Bind(R.id.no_movies)
+    TextView mNoMovies;
     @Bind(R.id.gridview)
     GridView mGridView;
     private MoviesAdapter mAdapter;
@@ -96,25 +101,38 @@ public class MoviesFragment extends Fragment implements AdapterView.OnItemClickL
 
 
     public void discoverMovies() {
+        if (!isAdded()) return;
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortOptionsPref = sharedPref.getString(PREFS_SORT_ORDER, getActivity().getString(R.string.sort_order_popularity));
 
         if (sortOptionsPref.equals(getActivity().getString(R.string.sort_order_favorites))) {
+            mCantConnect.setVisibility(View.GONE);
             getActivity().getSupportLoaderManager().destroyLoader(LOADER_ID);
             getActivity().getSupportLoaderManager().restartLoader(LOADER_ID, null, MoviesFragment.this);
         } else {
-            getActivity().getSupportLoaderManager().destroyLoader(LOADER_ID);
-            RestClient.get().discoverMovies(sortOptionsPref, new Callback<MoviesResponse>() {
-                @Override
-                public void success(MoviesResponse baseModel, Response response) {
-                    mAdapter.setData(baseModel.results);
-                    mActionListener.onMoviesLoaded(baseModel.results.get(0));
-                }
+            if (Utils.isNetworkConnected(getActivity())) {
+                getActivity().getSupportLoaderManager().destroyLoader(LOADER_ID);
+                RestClient.get().discoverMovies(sortOptionsPref, new Callback<MoviesResponse>() {
+                    @Override
+                    public void success(MoviesResponse baseModel, Response response) {
+                        mAdapter.setData(baseModel.results);
+                        mActionListener.onMoviesLoaded(baseModel.results.get(0));
+                        mCantConnect.setVisibility(View.GONE);
+                    }
 
-                @Override
-                public void failure(RetrofitError error) {
-                }
-            });
+                    @Override
+                    public void failure(RetrofitError error) {
+                    }
+                });
+            } else {
+                mCantConnect.setVisibility(View.VISIBLE);
+                mCantConnect.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        discoverMovies();
+                    }
+                });
+            }
         }
 
     }
@@ -128,7 +146,12 @@ public class MoviesFragment extends Fragment implements AdapterView.OnItemClickL
 
     @Override
     public void onLoadFinished(Loader<ArrayList<Movie>> loader, ArrayList<Movie> data) {
-        mAdapter.setData(data);
+        if (data != null && data.size() > 0) {
+            mNoMovies.setVisibility(View.GONE);
+            mAdapter.setData(data);
+        } else {
+            mNoMovies.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -152,10 +175,7 @@ public class MoviesFragment extends Fragment implements AdapterView.OnItemClickL
         } else {
             selectedId = R.id.popularity_order;
         }
-        if (!Utils.isNetworkConnected(getActivity())) {
-            menu.findItem(R.id.rating_order).setEnabled(false);
-            menu.findItem(R.id.popularity_order).setEnabled(false);
-        }
+
         menu.findItem(selectedId).setChecked(true);
     }
 
@@ -179,6 +199,7 @@ public class MoviesFragment extends Fragment implements AdapterView.OnItemClickL
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString(PREFS_SORT_ORDER, param);
             editor.apply();
+            mAdapter.setData(new ArrayList<Movie>());
             discoverMovies();
             return true;
         }

@@ -22,7 +22,6 @@ public class MoviesAdapter extends BaseAdapter {
     private Context mContext;
     private List<Movie> mMovies;
 
-
     public MoviesAdapter(Context context, List<Movie> movies) {
         mMovies = movies;
         mContext = context;
@@ -60,6 +59,8 @@ public class MoviesAdapter extends BaseAdapter {
 
         Picasso.with(mContext)
                 .load(MovieUtils.getPosterPath(movie, MovieUtils.IMAGES_SIZE_342))
+                .placeholder(R.drawable.loading_placeholder)
+                .error(R.drawable.error_placeholder)
                 .into(imageView);
 
         return imageView;
