@@ -27,6 +27,7 @@ import com.trncic.igor.pocketcinema.ui.adapters.MoviesAdapter;
 import com.trncic.igor.pocketcinema.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -40,6 +41,8 @@ import retrofit.client.Response;
 public class MoviesFragment extends Fragment implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<ArrayList<Movie>> {
 
     public static final String PREFS_SORT_ORDER = "PREFS_SORT_ORDER";
+    public static final String MOVIE_LIST_KEY = "MOVIE_LIST_KEY";
+
     private static final int LOADER_ID = 1;
     @Bind(R.id.cant_connect)
     TextView mCantConnect;
@@ -49,6 +52,7 @@ public class MoviesFragment extends Fragment implements AdapterView.OnItemClickL
     GridView mGridView;
     private MoviesAdapter mAdapter;
     private OnFragmentInteractionListener mActionListener;
+    private String mSortParam;
 
     public MoviesFragment() {
         super();
@@ -70,11 +74,28 @@ public class MoviesFragment extends Fragment implements AdapterView.OnItemClickL
 
         mGridView.setOnItemClickListener(this);
 
-        discoverMovies();
+        if (savedInstanceState == null) {
+            discoverMovies();
+        } else {
+            mSortParam = savedInstanceState.getString(PREFS_SORT_ORDER);
+            if (mSortParam != null && !mSortParam.equalsIgnoreCase(getSortParam())) {
+                discoverMovies();
+            }
+
+            List<Movie> movies = savedInstanceState.getParcelableArrayList(MOVIE_LIST_KEY);
+            mAdapter.setData(movies);
+        }
 
         setHasOptionsMenu(true);
 
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(MOVIE_LIST_KEY, mAdapter.getValues());
+        outState.putString(PREFS_SORT_ORDER, mSortParam);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -134,7 +155,6 @@ public class MoviesFragment extends Fragment implements AdapterView.OnItemClickL
                 });
             }
         }
-
     }
 
     @Override
@@ -201,9 +221,17 @@ public class MoviesFragment extends Fragment implements AdapterView.OnItemClickL
             editor.apply();
             mAdapter.setData(new ArrayList<Movie>());
             discoverMovies();
+
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public String getSortParam() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String sortParam = prefs.getString(PREFS_SORT_ORDER,
+                getString(R.string.sort_order_popularity));
+        return sortParam;
     }
 
     /**

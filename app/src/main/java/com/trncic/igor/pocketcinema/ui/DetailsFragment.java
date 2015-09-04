@@ -115,7 +115,7 @@ public class DetailsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mMovie = (Movie) getArguments().getSerializable(MOVIE);
+            mMovie = (Movie) getArguments().getParcelable(MOVIE);
             mTwoPane = getArguments().getBoolean(IS_TWO_PANE);
         }
     }

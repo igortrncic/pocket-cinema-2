@@ -3,6 +3,7 @@ package com.trncic.igor.pocketcinema.ui;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
@@ -57,7 +58,7 @@ public class MoviesActivity extends AppCompatActivity implements MoviesFragment.
                     .commit();
         } else {
             Intent intent = new Intent(this, DetailsActivity.class);
-            intent.putExtra(DetailsFragment.MOVIE, movie);
+            intent.putExtra(DetailsFragment.MOVIE, (Parcelable) movie);
             startActivity(intent);
         }
     }

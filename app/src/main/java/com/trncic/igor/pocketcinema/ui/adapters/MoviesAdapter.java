@@ -11,6 +11,7 @@ import com.trncic.igor.pocketcinema.R;
 import com.trncic.igor.pocketcinema.model.Movie;
 import com.trncic.igor.pocketcinema.model.MovieUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -69,5 +70,9 @@ public class MoviesAdapter extends BaseAdapter {
     public void setData(List<Movie> movies) {
         mMovies = movies;
         notifyDataSetChanged();
+    }
+
+    public ArrayList<Movie> getValues() {
+        return (ArrayList)mMovies;
     }
 }

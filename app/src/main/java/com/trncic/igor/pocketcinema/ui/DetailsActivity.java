@@ -13,7 +13,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
-        Movie movie = (Movie) getIntent().getSerializableExtra(DetailsFragment.MOVIE);
+        Movie movie = (Movie) getIntent().getParcelableExtra(DetailsFragment.MOVIE);
         boolean isTwoPane = getIntent().getBooleanExtra(DetailsFragment.IS_TWO_PANE, false);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()

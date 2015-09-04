@@ -1,5 +1,8 @@
 package com.trncic.igor.pocketcinema.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -7,31 +10,49 @@ import java.io.Serializable;
 /**
  * Created by igortrncic on 6/10/15.
  */
-public class Movie implements Serializable {
+public class Movie implements Serializable, Parcelable {
 
-    private int id;
 
-    private String title;
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
 
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
+    public int id;
+    public String title;
     @SerializedName("poster_path")
-    private String posterPath;
-
+    public String posterPath;
     @SerializedName("backdrop_path")
-    private String backdropPath;
-
+    public String backdropPath;
     @SerializedName("original_title")
-    private String originalTitle;
-
-    private String overview;
-
+    public String originalTitle;
+    public String overview;
     @SerializedName("release_date")
-    private String releaseDate;
-
+    public String releaseDate;
     @SerializedName("vote_average")
-    private float voteAverage;
-
+    public float voteAverage;
     @SerializedName("popularity")
-    private Float popularity;
+    public float popularity;
+
+    public Movie() {
+    }
+
+    private Movie(Parcel in) {
+        id = in.readInt();
+        title = in.readString();
+        posterPath = in.readString();
+        backdropPath = in.readString();
+        originalTitle = in.readString();
+        overview = in.readString();
+        releaseDate = in.readString();
+        voteAverage = in.readFloat();
+        popularity = in.readFloat();
+    }
 
     public int getId() {
         return id;
@@ -103,5 +124,23 @@ public class Movie implements Serializable {
 
     public void setPopularity(Float popularity) {
         this.popularity = popularity;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(title);
+        dest.writeString(posterPath);
+        dest.writeString(backdropPath);
+        dest.writeString(originalTitle);
+        dest.writeString(overview);
+        dest.writeString(releaseDate);
+        dest.writeFloat(voteAverage);
+        dest.writeFloat(popularity);
     }
 }
