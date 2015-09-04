@@ -57,11 +57,8 @@ public class MoviesFragment extends Fragment implements AdapterView.OnItemClickL
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_movies, container, false);
         ButterKnife.bind(this, view);
-
-        checkConnection();
 
         mAdapter = new MoviesAdapter(getActivity(), new ArrayList<Movie>());
         mGridView.setAdapter(mAdapter);
@@ -73,15 +70,6 @@ public class MoviesFragment extends Fragment implements AdapterView.OnItemClickL
         setHasOptionsMenu(true);
 
         return view;
-    }
-
-    private void checkConnection() {
-        if (!Utils.isNetworkConnected(getActivity())) {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString(MoviesFragment.PREFS_SORT_ORDER, getString(R.string.sort_order_favorites));
-            editor.apply();
-        }
     }
 
     @Override
