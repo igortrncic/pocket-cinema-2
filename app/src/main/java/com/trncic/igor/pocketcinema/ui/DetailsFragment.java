@@ -197,6 +197,9 @@ public class DetailsFragment extends Fragment {
         RestClient.get().getTrailers(mMovie.getId(), new retrofit.Callback<TrailersResponse>() {
             @Override
             public void success(TrailersResponse trailersResponse, Response response) {
+                if (!isAdded()) {
+                    return;
+                }
                 if (trailersResponse.results == null || trailersResponse.results.size() < 1) {
                     trailersContainer.setVisibility(View.GONE);
                     return;
@@ -232,6 +235,9 @@ public class DetailsFragment extends Fragment {
             @Override
             public void success(ReviewsResponse reviewsResponse, Response response) {
 
+                if(!isAdded()){
+                    return;
+                }
                 if (reviewsResponse.results == null || reviewsResponse.results.size() < 1) {
                     reviewsContainer.setVisibility(View.GONE);
                     return;
